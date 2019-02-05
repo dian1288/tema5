@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+</head>
+
+<body>
+
+	<div id="content">
+		<div><a href="https://kea.dk">Kea's Hjemmeside</a></div>
+		<div><a href="https://github.com/dian1288/tema5">Github</a></div>
+		<div>
+			<img src="http://helf-kea.dk/test/frog.png" alt="">
+		</div>
+	</div>
+	<script>
+		let content = document.querySelector("#content :nth-child(2)")
+		console.log(content);
+
+		/* alternativer:
+				console.log(document.querySelector("#content");
+
+			hvordan man får fat i de forskellige elementer:
+
+				div = document.querySelector("#content div") - men hiver kun fat i den første div
+
+				link = document.querySelector("#content a") - - men hiver kun fat i den første a
+
+				div'er = document.querySelector("#content div + div") -  hiver fat i den første og den næste div
+
+				billede = document.querySelector("#content img") - kun god mulighed hvis der kun er et billede
+
+			:nth-child() = meget stærk selector
+
+		*/
+	</script>
+</body>
+
+</html>
