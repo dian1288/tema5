@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<style>
+		div:nth-child(1) {
+			height: 100px;
+			width: 100px;
+			line-height: 100px;
+			text-align: center;
+			background-color: green;
+		}
+
+		div:nth-child(2) {
+			height: 100px;
+			width: 100px;
+			line-height: 100px;
+			text-align: center;
+			border-radius: 50%;
+			background-color: red;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="content">
+	</div>
+
+	<div id="content">
+	</div>
+
+	<script>
+		document.querySelector("div:nth-child(1)").textContent = "Grøn Firkant";
+		document.querySelector("div:nth-child(2)").textContent = "Rød Cirkel";
+	</script>
+</body>
+</html>
