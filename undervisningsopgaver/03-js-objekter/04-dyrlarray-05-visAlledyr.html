@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+</head>
+
+<body>
+	<div id="liste">
+		<h2></h2>
+		<img src="" alt="">
+		<p>Navn:</p>
+		<p>Type:</p>
+	</div>
+
+</body>
+
+<script>
+	document.addEventListener("DOMContentLoaded", start);
+
+
+	function start() {
+		let alleDyr = [{
+				"navn": "gris",
+				"type": "pattedyr",
+				"levested": "svinefarme",
+				"billede": "http://helf-kea.dk/test/gris.png"
+			},
+
+			{
+				"navn": "frø",
+				"type": "amfibie",
+				"billede": "http://helf-kea.dk/test/frog.png",
+				"levested": "vandhullet"
+			},
+
+			{
+				"navn": "ræv",
+				"type": "pattedyr",
+				"billede": "http://helf-kea.dk/test/fox.png",
+				"levested": "skoven"
+			},
+
+			{
+				"navn": "sild",
+				"type": "fisk",
+				"billede": "http://helf-kea.dk/test/sild.jpg",
+				"levested": "havet"
+			},
+			{
+				"navn": "krokodille",
+				"type": "krybdyr",
+				"billede": "http://helf-kea.dk/test/kroko.jpg",
+				"levested": "floden"
+			}
+		];
+
+
+
+		console.log(alleDyr);
+
+		let div = document.querySelector("#liste");
+		alleDyr.forEach(dyr => {
+			div.querySelector("h2").textContent = dyr.navn;
+			div.querySelector("p").textContent = "type: " + dyr.type;
+			div.querySelector("p + p").textContent = "levested: " + dyr.levested;
+			div.querySelector("img").src = dyr.billede;
+			div.querySelector("img").alt = "Billede";
+		})
+
+	}
+</script>
+</html>

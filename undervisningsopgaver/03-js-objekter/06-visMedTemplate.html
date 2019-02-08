@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+
+	<style>
+		#liste {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+
+		}
+
+		.dyr {
+			border: 1px solid black;
+			margin: 5px;
+			padding 5px;
+		}
+
+		@media screen and (min-width: 600px) {
+			#liste {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+
+			@media screen and (min-width: 768px) {
+				#liste {
+					grid-template-columns: repeat(3, 1fr);
+				}
+			}
+	</style>
+</head>
+
+<body>
+	<div id="grid">
+		<div id="liste">
+		</div>
+	</div>
+</body>
+
+<script>
+	document.addEventListener("DOMContentLoaded", start);
+	let alleDyr = [{
+			"navn": "gris",
+			"type": "pattedyr",
+			"levested": "svinefarme",
+			"billede": "http://helf-kea.dk/test/gris.png"
+		},
+
+		{
+			"navn": "frø",
+			"type": "amfibie",
+			"billede": "http://helf-kea.dk/test/frog.png",
+			"levested": "vandhullet"
+		},
+
+		{
+			"navn": "ræv",
+			"type": "pattedyr",
+			"billede": "http://helf-kea.dk/test/fox.png",
+			"levested": "skoven"
+		},
+
+		{
+			"navn": "sild",
+			"type": "fisk",
+			"billede": "http://helf-kea.dk/test/sild.jpg",
+			"levested": "havet"
+		},
+		{
+			"navn": "krokodille",
+			"type": "krybdyr",
+			"billede": "http://helf-kea.dk/test/kroko.jpg",
+			"levested": "floden"
+		}
+	];
+
+	function start() {
+
+
+		let dest = document.querySelector("#liste");
+
+		function visDyr() {
+			alleDyr.forEach(dyr => {
+				dest.innerHTML += `<div class="dyr"> <h2>${dyr.navn
+			}</h2> <img src=${dyr.billede}> <p>Type: ${dyr.type}</p> <p>Levested: ${dyr.levested}</p></div>`;
+			})
+
+		}
+		visDyr();
+	}
+</script>
+
+</html>

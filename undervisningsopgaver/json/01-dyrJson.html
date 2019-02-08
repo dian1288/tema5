@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<style>
+		#liste {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+
+		}
+
+		.dyr {
+			border: 1px solid black;
+			margin: 5px;
+			padding 5px;
+		}
+
+		@media screen and (min-width: 600px) {
+			#liste {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+
+			@media screen and (min-width: 768px) {
+				#liste {
+					grid-template-columns: repeat(3, 1fr);
+				}
+			}
+	</style>
+</head>
+
+<body>
+	<div id="liste">
+	</div>
+
+</body>
+
+<script>
+	let first = 0;
+	let last = 1;
+
+	let alleDyr = [];
+
+	document.addEventListener("DOMContentLoaded", start);
+
+	function start() {
+		hentJson();
+	}
+
+	// het JSON fil i asynkron function
+	async function hentJson() {
+		//henter data filen
+		let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1eBNqPb_SgxmA2kVMKTKGLCg5qyrGd0HoXPzaYXe7qJA");
+		//Hvis man skulle hente data udefra
+		// alternativ for at hente json filen: let jsonData = await fetch("dyrene.json");
+
+		console.log(jsonData);
+		alleDyr = await jsonData.json();
+		console.log(alleDyr);
+
+
+		visDyr();
+	}
+
+
+	let dest = document.querySelector("#liste");
+
+	function visDyr() {
+		alleDyr.forEach(dyr => {
+			dest.innerHTML += `<div class="dyr"> <h2>${dyr.navn
+			}</h2> <img src=${dyr.billede}> <p>Type: ${dyr.type}</p> <p>Levested: ${dyr.levested}</p></div>`;
+		})
+
+	}
+</script>
+
+</html>
