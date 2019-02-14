@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Personliste</title>
+	<link href="https://fonts.googleapis.com/css?family=Federo" rel="stylesheet">
+	<style>
+		img {
+			width: 200px;
+		}
+
+		*,
+		body * {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#personliste {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+		}
+
+		.personliste {
+			border: 2px solid #eef2f5;
+			box-shadow: 2px 2px 5px #a1a7ad;
+			margin: 5px;
+			text-align: center;
+		}
+
+		.menu,
+		h1 {
+			text-align: center;
+		}
+
+		button:hover {
+			background-color: #061736;
+			color: aliceblue;
+		}
+
+		h3 {
+			font-size: 2em;
+			color: #000000;
+			text-transform: uppercase;
+			font-family: 'Federo', sans-serif;
+		}
+
+		a {
+			color: #000000;
+			font-family: sans-serif;
+			text-decoration: none;
+		}
+
+		#popup {
+			top: 0;
+			width: 100vw;
+			height: 100vh;
+			position: fixed;
+			background-color: hsla(0, 15%, 48%, 0.5);
+			display: none;
+			overflow: scroll;
+		}
+
+		#indhold {
+			min-height: auto;
+			background-color: white;
+			width: 70vw;
+			margin: 4rem auto;
+		}
+
+		#luk {
+			position: fixed;
+			right: 2rem;
+			padding-right: 2rem;
+		}
+
+		#luk button {
+			font-size: 2rem;
+			padding: 1rem 2rem;
+		}
+
+
+		@media screen and (min-width: 600px) {
+			#personliste {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+		}
+
+		@media screen and (min-width: 768px) {
+			#personliste {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div id="popup">
+		<div id="luk">
+			<button> X </button>
+		</div>
+		<div id="indhold"></div>
+	</div>
+	<header>
+		<h1>Alle</h1>
+		<nav class="menu">
+			<button class="filter" data-hold="alle">Alle</button>
+			<button class="filter" data-hold="a">Hold A</button>
+			<button class="filter" data-hold="b">Hold B</button>
+		</nav>
+	</header>
+
+	<main>
+		<section id="personliste"></section>
+	</main>
+
+	<script>
+		let first = 0;
+		let last = 1;
+
+		let personer = [];
+		let filter = "a";
+
+
+		document.addEventListener("DOMContentLoaded", start);
+
+		function start() {
+			hentJson();
+
+			// het JSON fil i asynkron function
+			async function hentJson() {
+				//henter data filen
+				let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+				//Hvis man skulle hente data udefra
+				// alternativ for at hente json filen: let jsonData = await fetch("dyrene.json");
+
+				console.log(jsonData);
+				personer = await jsonData.json();
+				console.log(personer);
+				personer.sort((a, b) => {
+					return a.alder - b.alder
+				})
+
+
+				visPersoner();
+			}
+
+
+			let dest = document.querySelector("#personliste");
+
+			function visPersoner() {
+				dest.innerHTML = "";
+				personer.forEach(person => {
+					if (filter == "alle" || filter == person.hold) {
+						let template = `
+				<article class="personliste">
+				<h3>${person.navn}</h3>
+				<a href="http://github.com/${person.github}"> Link til GitHub </a> <br>
+				<img src=${person.billede} alt="${person.navn}">
+				<p>Alder: ${person.alder}</p>
+				</article>`;
+
+						dest.insertAdjacentHTML("beforeend", template),
+							dest.lastElementChild.addEventListener("click", () => {
+								visSingle(person);
+							});
+
+						function visSingle(person) {
+							document.querySelector("#indhold").innerHTML = `
+				<article class="personliste">
+				<h3>${person.navn}</h3>
+				<a href="http://github.com/${person.github}"> Link til GitHub </a> <br>
+				<img src=${person.billede} alt="${person.navn}">
+				<p>Alder: ${person.alder}</p>
+				</article>`;
+
+							document.querySelector("#popup").style.display = "block";
+							document.querySelector("#popup #luk").addEventListener("click", close);
+						}
+
+						function close() {
+							document.querySelector("#popup").style.display = "none";
+						}
+
+					}
+				});
+
+			}
+
+			document.querySelectorAll(".filter").forEach(elm => {
+				elm.addEventListener("click", filtrering);
+			})
+
+			function filtrering() {
+				filter = this.getAttribute("data-hold");
+				document.querySelector("h1").textContent = this.textContent;
+
+				document.querySelectorAll(".filter").forEach(elm => {
+					elm.classList.remove("valgt");
+				})
+				this.classList.add("valgt");
+				visPersoner();
+			}
+		}
+	</script>
+</body>
+
+
+</html>

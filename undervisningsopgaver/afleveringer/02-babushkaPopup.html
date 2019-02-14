@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bistro Babushka</title>
+	<link href="https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise" rel="stylesheet">
+
+
+	<style>
+		img {
+			width: 250px;
+		}
+
+		*,
+		body * {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#coverbillede {
+			background-color: black;
+			height: 194px;
+		}
+
+		#coverbillede img {
+			width: 30%;
+			position: relative;
+			top: 30%;
+			left: 35%;
+			padding: 50px;
+			z-index: 1;
+		}
+
+
+		button {
+			background-color: black;
+			width: 300px;
+			border: 10px solid black;
+			color: aliceblue;
+			text-transform: uppercase;
+
+		}
+
+		.valgt {
+			background-color: #800000;
+			border: 10px solid #800000;
+		}
+
+		#menu-container {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+			margin-left: 200px;
+			margin-right: 200px;
+
+		}
+
+		.menu-container {
+			text-align: center;
+			border-top: 2px solid #d1d3d4;
+			border-bottom: 2px solid #800000;
+		}
+
+		.menu-container img {
+			border: 2px solid #eef2f5;
+			box-shadow: 2px 2px 5px #a1a7ad;
+		}
+
+		.menu-container p {
+			color: #454444;
+			font-family: sans-serif;
+		}
+
+		.menu,
+		h1 {
+			text-align: center;
+			font-family: sans-serif;
+			text-transform: uppercase;
+		}
+
+		h3 {
+			font-size: 2em;
+			color: #190202;
+			font-weight: 100;
+			font-family: 'Waiting for the Sunrise', cursive;
+
+		}
+
+		a {
+			color: #000000;
+			font-family: sans-serif;
+			text-decoration: none;
+		}
+
+		#popup {
+			top: 0;
+			width: 100vw;
+			height: 100vh;
+			position: fixed;
+			background-color: hsla(0, 11%, 3%, 0.5);
+			display: none;
+			overflow: scroll;
+			z-index: 2;
+		}
+
+		#indhold {
+			min-height: auto;
+			background-color: white;
+			width: 70vw;
+			margin: 4rem auto;
+		}
+
+		#luk {
+			position: fixed;
+			right: 1rem;
+			padding-right: 1rem;
+		}
+
+		#luk button {
+			font-size: 2rem;
+		}
+
+
+		footer {
+			margin: 0px;
+			display: flex;
+			background-color: #bcbbbb;
+			justify-content: space-around;
+		}
+
+		footer p {
+			color: #ffffff;
+			text-align: center;
+			line-height: 23px;
+			text-transform: uppercase;
+			font-family: sans-serif;
+			font-size: 13px;
+		}
+
+		footer img {
+			height: 30px;
+			position: relative;
+			top: 30px;
+			left: 60px;
+		}
+
+		@media screen and (min-width: 600px) {
+			#menu-container {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+		}
+
+		@media screen and (min-width: 768px) {
+			#menu-container {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div id="popup">
+		<div id="luk">
+			<button> x </button>
+		</div>
+		<div id="indhold"></div>
+	</div>
+	<header>
+		<div id="coverbillede">
+			<img src="02-babushka-billeder/bblogo.png" alt="bistro_billede">
+
+			<div class="menu">
+				<button class="filter valgt" data-hold="alle">Alle</button>
+				<button class="filter" data-hold="forretter">Forretter</button>
+				<button class="filter" data-hold="hovedretter">Hovedretter</button>
+				<button class="filter" data-hold="desserter">Desserter</button>
+				<button class="filter" data-hold="sideorders">Sideorders</button>
+			</div>
+		</div>
+
+		<h1>Alle</h1>
+	</header>
+
+	<div id="menu-container"></div>
+
+	<footer>
+
+		<p>
+			Adresse
+			<br>
+			Grønnegade 97
+			<br>
+			1234 København K
+		</p>
+		<img src="02-babushka-billeder/bblogo.png" alt="bistro_billede">
+		<p>
+			Åbningstider
+			<br>
+			Mandag – fredag 10:30 – 22:00
+			<br>
+			Lørdag 12:00 – 23:00
+		</p>
+
+
+	</footer>
+
+	<script>
+		let retter = [];
+		let filter = "alle";
+
+
+		document.addEventListener("DOMContentLoaded", start);
+
+		function start() {
+			hentJson();
+
+			// het JSON fil i asynkron function
+			async function hentJson() {
+				//henter data filen
+				let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
+				//Hvis man skulle hente data udefra
+				// alternativ for at hente json filen: let jsonData = await fetch("dyrene.json");
+
+
+
+				console.log(jsonData);
+				retter = await jsonData.json()
+				console.log(retter);
+				retter.sort((a, b) => {
+					return a.navn.localeCompare(b.id);
+				})
+				visRetter();
+			}
+
+
+			let dest = document.querySelector("#menu-container");
+
+			function visRetter() {
+				dest.innerHTML = "";
+				retter.forEach(ret => {
+					if (filter == "alle" || filter == ret.kategori) {
+						let template = `
+				<article class="menu-container">
+				<h3>${ret.navn}</h3>
+				<img src="02-babushka-billeder/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+				<p>${ret.kort}</p>
+				<p>Pris: ${ret.pris} ,-</p>
+				</article>`;
+
+						dest.insertAdjacentHTML("beforeend", template),
+							dest.lastElementChild.addEventListener("click", () => {
+								visSingle(ret);
+							});
+
+
+						function visSingle(ret) {
+							document.querySelector("#indhold").innerHTML = `
+				<article class="menu-container">
+				<img src="02-babushka-billeder/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+				<h3>${ret.navn}</h3>
+				<p>Oprindelse: ${ret.oprindelse}</p>
+				<p>${ret.lang}</p>
+				<p>Pris: ${ret.pris} ,-</p>
+				</article>`;
+
+							document.querySelector("#popup").style.display = "block";
+							document.querySelector("#popup #luk").addEventListener("click", close);
+						}
+
+						function close() {
+							document.querySelector("#popup").style.display = "none";
+						}
+
+					}
+				});
+
+			}
+
+			document.querySelectorAll(".filter").forEach(elm => {
+				elm.addEventListener("click", filtrering);
+			})
+
+			function filtrering() {
+				filter = this.getAttribute("data-hold");
+				document.querySelector("h1").textContent = this.textContent;
+
+				document.querySelectorAll(".filter").forEach(elm => {
+					elm.classList.remove("valgt");
+				})
+				this.classList.add("valgt");
+				visRetter();
+			}
+		}
+	</script>
+</body>
+
+
+</html>

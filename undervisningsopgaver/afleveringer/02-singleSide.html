@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bistro Babushka</title>
+	<link href="https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise" rel="stylesheet">
+
+	<style>
+		img {
+			width: 200px;
+		}
+
+		*,
+		body * {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#personliste {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+		}
+
+		.personliste {
+			border: 2px solid #eef2f5;
+			box-shadow: 2px 2px 5px #a1a7ad;
+			margin: 5px;
+			text-align: center;
+		}
+
+		button {
+			margin: 10px;
+		}
+
+		button:hover {
+			background-color: #800000;
+			color: white;
+		}
+
+
+		#single {
+			width: 100vw;
+			height: 100vh;
+			background-color: white;
+		}
+
+		#indhold {
+			min-height: auto;
+			background-color: white;
+			width: 70vw;
+			margin: 2rem auto;
+			text-align: center;
+			border-top: 2px solid #d1d3d4;
+			border-bottom: 2px solid #800000;
+		}
+
+		h3 {
+			font-size: 2em;
+			color: #190202;
+			font-weight: 100;
+			font-family: 'Waiting for the Sunrise', cursive;
+
+		}
+
+		#tilbage {
+			cursor: pointer;
+		}
+
+		#tilbage button {
+			font-size: 2rem;
+			padding: 1rem 2rem;
+		}
+
+		@media screen and (min-width: 600px) {
+			#personliste {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+		}
+
+		@media screen and (min-width: 768px) {
+			#personliste {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<main id="single">
+		<div id="tilbage">
+			<button>
+				Tilbage til siden </button> </div>
+		<section id="indhold">
+		</section>
+	</main>
+	<script>
+		let urlParams = new URLSearchParams(window.location.search)
+		let id = urlParams.get("id");
+
+		let retter = [];
+
+
+
+		document.addEventListener("DOMContentLoaded", start);
+
+		function start() {
+			async function hentJson() {
+
+				let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
+
+				personer = await jsonData.json();
+				visRetter();
+			}
+
+
+
+
+			function visRetter() {
+				let dest = document.querySelector("#indhold");
+				dest.innerHTML = "";
+				personer.forEach(ret => {
+					if (id == ret.id) {
+						let template = `
+				<article class="menu-container">
+<h3>${ret.navn}</h3>
+				<img src="02-babushka-billeder/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+				<p>Oprindelse: ${ret.oprindelse}</p>
+				<p>${ret.lang}</p>
+				<p>Pris: ${ret.pris} ,-</p>
+				</article>`;
+						dest.insertAdjacentHTML("beforeend", template);
+
+					}
+
+
+				});
+
+			}
+
+			document.querySelector("#tilbage").addEventListener("click", () => {
+				location.href = "02-babushkaSingle.html";
+			})
+
+			hentJson();
+
+		}
+	</script>
+</body>
+
+
+</html>

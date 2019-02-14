@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Personliste</title>
+	<link href="https://fonts.googleapis.com/css?family=Federo" rel="stylesheet">
+	<style>
+		img {
+			width: 200px;
+		}
+
+		*,
+		body * {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#personliste {
+			display: grid;
+			grid-template-columns: repeat(1, 1fr);
+			grid-gap: 1vw;
+		}
+
+		.personliste {
+			border: 2px solid #eef2f5;
+			box-shadow: 2px 2px 5px #a1a7ad;
+			margin: 5px;
+			text-align: center;
+		}
+
+		.menu,
+		h1 {
+			text-align: center;
+		}
+
+		button:hover {
+			background-color: #061736;
+			color: aliceblue;
+		}
+
+		h3 {
+			font-size: 2em;
+			color: #000000;
+			text-transform: uppercase;
+			font-family: 'Federo', sans-serif;
+		}
+
+		a {
+			color: #000000;
+			font-family: sans-serif;
+			text-decoration: none;
+		}
+
+
+		#single {
+			width: 100vw;
+			height: 100vh;
+			background-color: background-color: hsla(0, 15%, 48%, 0.5);
+		}
+
+		#indhold {
+			min-height: auto;
+			background-color: white;
+			width: 70vw;
+			margin: 2rem auto;
+		}
+
+		#tilbage {
+			cursor: pointer;
+		}
+
+		#tilbage button {
+			font-size: 2rem;
+			padding: 1rem 2rem;
+		}
+
+		@media screen and (min-width: 600px) {
+			#personliste {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+		}
+
+		@media screen and (min-width: 768px) {
+			#personliste {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<main id="single">
+		<div id="tilbage">
+			<button>
+				<< </button> </div> <section id="indhold">
+					</section>
+	</main>
+	<script>
+		let urlParams = new URLSearchParams(window.location.search)
+		let github = urlParams.get("github");
+
+		let personer = [];
+
+
+
+		document.addEventListener("DOMContentLoaded", start);
+
+		function start() {
+			async function hentJson() {
+				//henter data filen
+				let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+				//Hvis man skulle hente data udefra
+				// alternativ for at hente json filen: let jsonData = await fetch("dyrene.json");
+
+				console.log(jsonData);
+				personer = await jsonData.json();
+				console.log(personer);
+				personer.sort((a, b) => {
+					return a.alder - b.alder
+				})
+
+
+				visPersoner();
+			}
+
+
+
+
+			function visPersoner() {
+				let dest = document.querySelector("#indhold");
+				dest.innerHTML = "";
+				personer.forEach(person => {
+					if (github == person.github) {
+						let template = `
+				<article class="personliste">
+				<h3>${person.navn}</h3>
+				<a href="http://github.com/${person.github}"> Link til GitHub </a> <br>
+				<img src=${person.billede} alt="${person.navn}">
+				<p>Alder: ${person.alder}</p>
+				</article>`;
+
+						dest.insertAdjacentHTML("beforeend", template);
+
+					}
+
+
+				});
+
+			}
+
+			document.querySelector("#tilbage").addEventListener("click", () => {
+				location.href = "05-kald.html";
+			})
+
+			hentJson();
+
+		}
+	</script>
+</body>
+
+
+</html>
