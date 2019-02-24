@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bite Of Viet</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+	<header>
+
+		<div class="container">
+			<div class="item-a">
+				<div id="logo">
+					<a href="index.html"><img src="img/biteOfViet_logo.png"></a>
+				</div>
+
+				<nav class="nav">
+					<a id="nav_forside" href="index.html">Welcome</a>
+					<a id="nav_portfolio" href="menu.html">Menu</a>
+					<a id="nav_om_mig" href="reservation.html">Resevation</a>
+					<a id="nav_kontakt" href="kontakt.html">Contact</a>
+				</nav>
+
+
+				<nav class="nav_mobile">
+					<div id="menuknap">☰</div>
+					<ul id="menu" class="hidden">
+						<li><a id="nav_forside_mobile" href="index.html">Welcome</a></li>
+						<li><a id="nav_portfolio_mobile" href="menu.html">Menu</a></li>
+						<li><a id="nav_om_mig_mobile" href="reservation.html">Resevation</a></li>
+						<li><a id="nav_kontakt_mobile" href="kontakt.html">Contact</a></li>
+					</ul>
+				</nav>
+
+
+
+				<div id="slider">
+					<figure>
+						<img src="2.jpg" alt="" class="mobil-no">
+						<img src="3.jpg" alt="" class="mobil-no">
+						<img src="1.jpg" alt="">
+					</figure>
+
+				</div>
+
+				<div id="slider-mobile">
+
+					<img src="3_mobil.jpg" alt="" style="width: 100%;">
+
+				</div>
+
+			</div>
+
+		</div>
+	</header>
+
+	<script>
+		window.addEventListener("load", sidenVises);
+
+
+		function sidenVises() {
+			console.log("siden vises!");
+			// registrer klik på menu-knap
+			document.querySelector("#menuknap").addEventListener("click", toggleMenu);
+		}
+
+		function toggleMenu() {
+			console.log("Toggle menu");
+			document.querySelector("#menu").classList.toggle("hidden");
+
+			let erSkjult = document.querySelector("#menu").classList.contains("hidden");
+
+			if (erSkjult == true) {
+				//menuen er nu skjult - ændr menuknap til lll
+				document.querySelector("#menuknap").textContent = "☰";
+			} else {
+				//menuen er nu vist - ændr menuknap til x
+				document.querySelector("#menuknap").textContent = "x"
+			}
+
+		}
+
+	</script>
+</body>
+
+</html>
